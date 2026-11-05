@@ -1,0 +1,390 @@
+<title>Lower Third Breathing Room</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Source+Sans+3:wght@400;600;700&family=Roboto:wght@500;700&family=Roboto+Condensed:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: How To Speak Data page — brand header, controls card, the 16:9 frame as the hero, type-size readouts beneath */
+:root {
+  --paper: #FAF9F6;
+  --card: #FFFFFF;
+  --ink: #0B1220;
+  --body: #3B4656;
+  --muted: #7C8B9E;
+  --hairline: #E4E1DA;
+  --accent: #1E5FD9;
+  --accent-hover: #14336B;
+  --on-accent: #FFFFFF;
+  --display: "Poppins", system-ui, sans-serif;
+  --text: "Source Sans 3", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0B1220; --card: #121B2E; --ink: #F1F4F9; --body: #C3CCD9; --muted: #8696AB;
+    --hairline: #22304A; --accent: #46B8E6; --accent-hover: #7DD3FC; --on-accent: #0B1220; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0B1220; --card: #121B2E; --ink: #F1F4F9; --body: #C3CCD9; --muted: #8696AB;
+  --hairline: #22304A; --accent: #46B8E6; --accent-hover: #7DD3FC; --on-accent: #0B1220; color-scheme: dark;
+}
+
+body { background: var(--paper); color: var(--ink); font-family: var(--text); font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+.page {
+  max-width: 1140px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 48px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.brandline { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.brandline svg { width: 20px; height: 22px; flex: none; }
+.eyebrow { font-family: var(--display); font-weight: 600; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(24px, 3vw, 32px); line-height: 1.1; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+.lede { margin: 6px 0 0; color: var(--body); font-size: 16px; max-width: 80ch; text-wrap: pretty; }
+
+.toolbar {
+  background: var(--card); border: 1px solid var(--hairline); border-radius: 8px;
+  padding: 8px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px;
+}
+.tool { display: flex; align-items: center; gap: 8px; flex: 1 1 230px; min-width: 0; }
+.tool label { font-family: var(--display); font-weight: 600; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.tool input[type=range] { flex: 1; min-width: 70px; accent-color: var(--accent); margin: 0; height: 22px; }
+.tool output { font-family: var(--display); font-size: 13px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 5.2em; text-align: right; }
+.seg { display: inline-flex; border: 1px solid var(--hairline); border-radius: 4px; overflow: hidden; }
+.seg button, .btn { font: 600 13px/1 var(--display); padding: 7px 10px; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--hairline); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.btn { border: 1px solid var(--accent-hover); color: var(--accent-hover); border-radius: 4px; white-space: nowrap; transition: background-color .15s, color .15s; }
+.btn:hover { background: var(--accent-hover); color: var(--card); }
+.btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btns { display: flex; gap: 8px; flex-wrap: wrap; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.stage { position: relative; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; background: #000; box-shadow: 0 14px 36px rgba(11,18,32,.18); }
+.frame { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; background: linear-gradient(180deg, #d9dadd 0%, #c9cbcf 100%); }
+.shot { background-image: url("__IMG__"); background-repeat: no-repeat; background-size: 1920px 1080px; }
+/* The screenshot is cut off where the aired lower third starts; the rebuild replaces it. */
+.frame > .shot.full { position: absolute; inset: 0; }
+/* Masks blank out exactly where the aired graphic sat (its tab and its body). */
+.mask { position: absolute; background: #d4d6d9; }
+.mask.m-tab { left: 70px; top: 719px; width: 520px; height: 70px; }
+.mask.m-body { left: 70px; top: 783px; width: 1781px; height: 272px; }
+.frame.original .mask { display: none; }
+.frame .lt { z-index: 2; }
+/* Colours matched to the aired frame, as it reads on screen. */
+.frame .lt { --red: #c3242a; --blue: #1f62ad; --blue-ink: #2a5f96; --purple: #775390; --check: #e8cf3a; }
+.frame .lt .tab, .frame .lt .live { background: #e43a33; }
+
+/* Type closer to CNN's on-air sans: condensed, medium labels, bold (not black) numbers. */
+.frame .lt { font-family: "Roboto Condensed", "Arial Narrow", sans-serif; }
+.frame .lt .tab { font-family: "Roboto", Arial, sans-serif; font-weight: 500; font-size: 46px; letter-spacing: .01em; }
+.frame .lt .headline span { font-family: "Roboto", Arial, sans-serif; font-weight: 700; letter-spacing: -.01em; }
+.frame .lt .live { font-family: "Roboto", Arial, sans-serif; font-weight: 500; font-size: 48px; letter-spacing: .06em; }
+.frame .lt .race-head .t { font-weight: 500; font-size: calc(48px * var(--s)); letter-spacing: -.01em; }
+.frame .lt .need small { font-family: "Roboto Condensed", sans-serif; font-weight: 500; font-size: calc(13px * var(--s)); }
+.frame .lt .need b { font-weight: 500; font-size: calc(32px * var(--s)); }
+.frame .lt .cell .n { font-weight: 700; font-size: calc(74px * var(--s)); line-height: .8; letter-spacing: -.01em; }
+.frame .lt .cell .l { font-weight: 500; font-size: calc(23px * var(--s)); }
+.frame .lt .pick span { font-weight: 500; font-size: calc(21px * var(--s)); }
+.frame .lt .mt-head .t { font-weight: 600; font-size: calc(42px * var(--s)); }
+.frame .lt .mt-head .t small { font-weight: 500; font-size: calc(30px * var(--s)); }
+.frame .lt .ev b { font-weight: 600; }
+.frame .lt .ev small { font-family: "Roboto Condensed", sans-serif; font-weight: 500; }
+.frame .lt .nm { font-weight: 600; font-size: calc(48px * var(--s)); }
+.frame .lt .vt { font-weight: 500; font-size: calc(48px * var(--s)); }
+.frame .lt .pc { font-weight: 600; font-size: calc(50px * var(--s)); }
+/* Breaking News, the headline and Live stay exactly as aired: no added padding, no type scaling. */
+.frame .lt .tab { padding-left: 54px; padding-right: 54px; font-size: 50px; }
+.frame .lt .headline { padding: 20px 34px; }
+.frame .lt .headline span { font-size: calc(71px * var(--hs)); }
+.frame .lt .live { padding: 5px 0; font-size: 52px; }
+.frame .tag { z-index: 3; }
+.frame .lt { height: var(--band, auto); }
+.frame .lt .tab { width: 511px; min-width: 0; height: 61px; flex: none; display: flex; align-items: center; white-space: nowrap; overflow: hidden; padding-top: 0; padding-bottom: 0; }
+.frame .lt .body { flex: 1; min-height: 0; }
+/* The logo column fills whatever height the box has and never sets it. */
+.frame .lt .side { contain: size; overflow: hidden; }
+.frame .lt .live { flex: none; }
+.frame .lt .brand { min-height: 0; }
+/* Candidate photos scale with the type so they never hold the rows open. */
+.frame .lt .ph { width: calc(43px * var(--s)); height: calc(43px * var(--s)); background-size: calc(1920px * var(--s)) calc(1080px * var(--s)); }
+.frame .lt .ph.a { background-position: calc(-857px * var(--s)) calc(-951px * var(--s)); }
+.frame .lt .ph.b { background-position: calc(-857px * var(--s)) calc(-1001px * var(--s)); }
+.tag { position: absolute; top: 22px; left: 22px; font: 600 22px/1 "Poppins", sans-serif; letter-spacing: .14em; background: rgba(11,18,32,.75); color: #fff; padding: 11px 16px; border-radius: 4px; text-transform: uppercase; }
+
+.readouts { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: baseline; }
+.stat { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.stat .num { font-family: var(--display); font-weight: 700; font-size: 18px; line-height: 1.2; font-variant-numeric: tabular-nums; order: 2; }
+.stat .num.down { color: var(--accent); }
+.stat .sub { font-size: 14px; color: var(--muted); order: 1; }
+.note { font-size: 14px; color: var(--body); max-width: 90ch; margin: 0; }
+
+/* ---------- The rebuilt lower third (1920×1080 coordinates) ---------- */
+.lt {
+  --p: 0px; --s: 1; --hs: 1;
+  --red: #d40d19; --blue: #1458cf; --blue-ink: #0d4bb3; --purple: #8a2bc4; --check: #f4d21a;
+  --mt: #111; --mt-w: 3px;
+  position: absolute; left: 72px; bottom: 29px; width: 1776px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  color: #111; font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+}
+.lt[hidden] { display: none !important; }
+.lt.caps { text-transform: uppercase; }
+.lt .tab {
+  background: var(--red); color: #fff; font: 600 calc(50px * var(--s))/1 "Barlow", sans-serif; letter-spacing: .01em;
+  padding: calc(7px + var(--p) * .5) calc(54px + var(--p) * .5); border-radius: 14px 14px 0 0; min-width: 511px;
+}
+.lt .body { display: flex; width: 100%; gap: 2px; align-items: stretch; }
+.lt .main { width: 1534px; display: flex; flex-direction: column; background: var(--red); padding-left: 19px; padding-top: 2px; border-radius: 0 0 0 16px; overflow: hidden; }
+.lt .headline { background: #fff; padding: calc(20px + var(--p) * .5) calc(34px + var(--p)); overflow: hidden; }
+.lt .headline span {
+  display: inline-block; white-space: nowrap; font: 800 calc(71px * var(--s) * var(--hs))/1 "Barlow Semi Condensed", "Arial Narrow", sans-serif;
+  letter-spacing: -.005em;
+}
+.lt .scores { display: flex; gap: calc(7px + var(--p) * .5); background: #fff; flex: 1; }
+.lt .race { width: 373px; display: flex; flex-direction: column; flex: none; }
+.lt .race + .race { width: 375px; }
+.lt .race-head { background: var(--blue); color: #fff; display: flex; justify-content: space-between; align-items: center; padding: calc(var(--p) * .5) calc(6px + var(--p)); border-bottom: 2px solid #fff; }
+.lt .race-head .t { font-weight: 700; font-size: calc(52px * var(--s)); line-height: .9; }
+.lt .need { text-align: center; line-height: 1; }
+.lt .need small { display: block; font: 700 calc(12px * var(--s))/1 "Barlow", sans-serif; letter-spacing: .01em; }
+.lt .need b { font-size: calc(36px * var(--s)); font-weight: 700; line-height: .85; }
+.lt .cells { display: grid; grid-template-columns: 1fr 1fr; flex: 1; }
+.lt .cell { color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--p) calc(4px + var(--p)); gap: calc(var(--p) * .35); }
+.lt .cell.d { background: var(--blue); }
+.lt .cell.r { background: var(--red); border-left: 4px solid #fff; }
+.lt .cell .n { font-weight: 800; font-size: calc(76px * var(--s)); line-height: .78; font-variant-numeric: tabular-nums; }
+.lt .cell .l { font-weight: 700; font-size: calc(25px * var(--s)); line-height: .9; white-space: nowrap; }
+.lt .cell .l i { color: var(--check); font-style: normal; }
+.lt .pick { display: grid; grid-template-columns: 1fr 1fr; }
+.lt .pick span { color: var(--blue-ink); font-weight: 700; font-size: calc(22px * var(--s)); line-height: 1; text-align: center; padding: calc(1px + var(--p) * .5) 0; }
+
+.lt .mt { flex: 1; min-width: 0; display: flex; flex-direction: column; border: var(--mt-w) solid var(--mt); border-right: 0; background: #fff; }
+.lt .mt-head { display: flex; justify-content: space-between; align-items: center; padding: calc(var(--p) * .5) calc(4px + var(--p)); border-bottom: var(--mt-w) solid var(--mt); }
+.lt .mt-head .t { font-weight: 700; font-size: calc(44px * var(--s)); line-height: .9; }
+.lt .mt-head .t small { font-size: calc(34px * var(--s)); font-weight: 600; }
+.lt .ev { display: grid; grid-template-columns: auto auto; column-gap: 4px; align-items: end; }
+.lt .ev b { font-size: calc(19px * var(--s)); font-weight: 700; line-height: 1; }
+.lt .ev .bar { display: flex; gap: 2px; padding-bottom: 2px; }
+.lt .ev .bar i { width: calc(8px * var(--s)); height: calc(14px * var(--s)); background: #2bb24c; }
+.lt .ev .bar i.o { background: #b9bec5; }
+.lt .ev small { grid-column: 1 / -1; font: 700 calc(10px * var(--s))/1 "Barlow", sans-serif; }
+.lt .cand { display: flex; align-items: stretch; flex: 1; }
+.lt .cand + .cand { border-top: var(--mt-w) solid var(--mt); }
+.lt .ph { width: 43px; flex: none; align-self: center; height: 43px; margin: var(--p) 0 var(--p) calc(2px + var(--p)); }
+.lt .ph.a { background-position: -857px -951px; }
+.lt .ph.b { background-position: -857px -1001px; }
+.lt .nm { flex: 1; font-weight: 700; font-size: calc(52px * var(--s)); line-height: .9; display: flex; align-items: center; padding: var(--p) calc(6px + var(--p) * .5); }
+.lt .vt { font-weight: 600; font-size: calc(50px * var(--s)); line-height: .9; display: flex; align-items: center; padding: var(--p) calc(4px + var(--p)); font-variant-numeric: tabular-nums; }
+.lt .pc { width: calc(140px + var(--p)); flex: none; color: #fff; display: flex; align-items: center; justify-content: flex-end; padding: var(--p) calc(4px + var(--p) * .5); font-weight: 700; font-size: calc(52px * var(--s)); line-height: .9; }
+.lt .pc small { font-size: .58em; margin-left: 2px; align-self: flex-end; }
+.lt .pc.r { background: var(--red); }
+.lt .pc.p { background: var(--purple); }
+
+.lt .side { width: 240px; display: flex; flex-direction: column; }
+.lt .live { background: var(--red); color: #fff; font: 700 calc(52px * var(--s))/1 "Barlow", sans-serif; letter-spacing: .08em; text-align: center; padding: calc(5px + var(--p) * .5) 0; border-radius: 0 12px 0 0; }
+.lt .brand { flex: 1; background: #fff; display: flex; flex-direction: column; justify-content: flex-end; border-radius: 0 0 12px 0; overflow: hidden; }
+.lt .brand .shot { width: 238px; height: 197px; background-position: -1610px -850px; flex: none; }
+
+
+
+
+
+
+
+
+
+
+
+</style>
+
+<div class="page">
+  <header>
+    <div class="brandline">
+      <svg viewBox="0 0 200 220" aria-hidden="true"><path d="M40,10 L160,10 A30,30 0 0 1 190,40 L190,140 A30,30 0 0 1 160,170 L110,170 L60,212 L82,170 L40,170 A30,30 0 0 1 10,140 L10,40 A30,30 0 0 1 40,10 Z" fill="#FFFFFF" stroke="#0B1220" stroke-width="8" stroke-linejoin="round"/><path d="M41,150 L41,120 L69,120 L69,150 Z" fill="#14336B"/><path d="M71,150 L71,95 L99,95 L99,150 Z" fill="#1E5FD9"/><path d="M101,150 L101,70 L129,70 L129,150 Z" fill="#46B8E6"/><path d="M131,150 L131,48 L159,48 L159,150 Z" fill="#7DD3FC"/></svg>
+      <span class="eyebrow">How To Speak Data · Design study</span>
+    </div>
+    <h1>Lower Third Breathing Room</h1>
+    <p class="lede">CNN's election-night graphic packs every number against its box. The rebuilt graphic below stays exactly the size it aired at, so any padding you add comes out of the type.</p>
+  </header>
+
+  <section class="toolbar" aria-label="Controls">
+    <div class="tool">
+      <label for="pad">Padding</label>
+      <input type="range" id="pad" min="0" max="24" step="1" value="0">
+      <output id="padOut" for="pad">+0px</output>
+    </div>
+    <div class="tool">
+      <label for="soft">Montana borders</label>
+      <input type="range" id="soft" min="0" max="100" step="1" value="0">
+      <output id="softOut" for="soft">Black</output>
+    </div>
+    <div class="seg" role="group" aria-label="Text case">
+      <button type="button" id="caseUpper" aria-pressed="true">ALL CAPS</button>
+      <button type="button" id="caseMixed" aria-pressed="false">Mixed case</button>
+    </div>
+    <div class="btns">
+      <button type="button" class="btn" id="orig" aria-pressed="false">Show original</button>
+      <button type="button" class="btn" id="reset">Reset</button>
+    </div>
+  </section>
+
+  <div class="stage" id="stage">
+    <div class="frame" id="frame">
+      <div class="shot full" role="img" aria-label="CNN election-night broadcast: Abdul El-Sayed at a podium in Detroit, reporter on the right, results graphic along the bottom"></div>
+      <div class="lt caps" id="lt" aria-label="Rebuilt lower third">
+        <div class="tab">Breaking News</div>
+        <div class="body">
+          <div class="main">
+            <div class="headline"><span id="hl">Michigan Senate race too early to call</span></div>
+            <div class="scores">
+              <div class="race">
+                <div class="race-head"><span class="t">U.S. Senate</span><span class="need"><small>Needed to control</small><b>51</b></span></div>
+                <div class="cells">
+                  <div class="cell d"><span class="n">53</span><span class="l">Democrats<i>✓</i></span></div>
+                  <div class="cell r"><span class="n">42</span><span class="l">Republicans</span></div>
+                </div>
+                <div class="pick"><span>7 pickups</span><span></span></div>
+              </div>
+              <div class="race">
+                <div class="race-head"><span class="t">U.S. House</span><span class="need"><small>Needed to control</small><b>218</b></span></div>
+                <div class="cells">
+                  <div class="cell d"><span class="n">226</span><span class="l">Democrats<i>✓</i></span></div>
+                  <div class="cell r"><span class="n">132</span><span class="l">Republicans</span></div>
+                </div>
+                <div class="pick"><span>27 pickups</span><span></span></div>
+              </div>
+              <div class="mt">
+                <div class="mt-head">
+                  <span class="t">Montana <small>Senate</small></span>
+                  <span class="ev"><b>74%</b><span class="bar"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i></span><small>Estimated vote</small></span>
+                </div>
+                <div class="cand"><span class="ph a shot"></span><span class="nm">Alme</span><span class="vt">175,779</span><span class="pc r">47.2<small>%</small></span></div>
+                <div class="cand"><span class="ph b shot"></span><span class="nm">Bodnar</span><span class="vt">145,918</span><span class="pc p">39.1<small>%</small></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="side">
+            <div class="live">Live</div>
+            <div class="brand"><div class="shot"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="mask m-tab" aria-hidden="true"></div>
+      <div class="mask m-body" aria-hidden="true"></div>
+      <span class="tag" id="tag">Rebuilt graphic</span>
+    </div>
+  </div>
+
+  <section class="readouts" aria-label="Type sizes on a 1080p frame">
+    <div class="stat"><div class="num" id="rNum">76px</div><div class="sub">Seat-count numbers</div></div>
+    <div class="stat"><div class="num" id="rVote">50px</div><div class="sub">Montana vote totals</div></div>
+    <div class="stat"><div class="num" id="rHead">71px</div><div class="sub">Headline</div></div>
+    <div class="stat"><div class="num" id="rScale">100%</div><div class="sub">Type size vs. as aired</div></div>
+  </section>
+
+  <p class="note">The aired lower third is cropped out of the screenshot and replaced by an HTML rebuild, fixed at 1776 × <span id="rBand">329</span>px (31% of a 1080p frame's height) whatever the settings. Sizes are pixels on a 1080p frame. Show original brings back the aired graphic. The CNN logo block is cut from the screenshot and does not change.</p>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const stage = $('stage'), frame = $('frame'), lt = $('lt'), hl = $('hl');
+  const pad = $('pad'), soft = $('soft');
+  // The aired lower third, measured from the broadcast frame (1080p): x 72–1848, y 722–1051.
+  const H0 = 329;
+  lt.style.setProperty('--band', H0 + 'px');
+
+  function visible() { return lt.offsetHeight > 0; }
+  function fitStage() {
+    frame.style.transform = 'scale(' + (stage.clientWidth / 1920) + ')';
+    if (stage.clientWidth > 0) apply();
+  }
+
+  function fitHeadline() {
+    lt.style.setProperty('--hs', 1);
+    const box = hl.parentElement, cs = getComputedStyle(box);
+    const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const w = hl.scrollWidth;
+    if (w > avail) lt.style.setProperty('--hs', (avail / w).toFixed(4));
+  }
+  // Natural (unconstrained) height of the graphic at type scale s.
+  function measure(s) {
+    lt.style.setProperty('--band', 'auto');
+    lt.style.setProperty('--s', s);
+    fitHeadline();
+    return lt.offsetHeight;
+  }
+  function lock() { lt.style.setProperty('--band', H0 + 'px'); }
+
+  // Largest type scale that keeps the band at its on-air height.
+  function solveScale() {
+    if (measure(1) <= H0) return 1;
+    let lo = 0.2, hi = 1;
+    for (let i = 0; i < 18; i++) {
+      const mid = (lo + hi) / 2;
+      if (measure(mid) <= H0) lo = mid; else hi = mid;
+    }
+    return lo;
+  }
+
+  function apply() {
+    const p = +pad.value;
+    lt.style.setProperty('--p', p + 'px');
+    $('padOut').textContent = p === 0 ? '0 · aired' : '+' + p + 'px';
+    // Can't measure while the page is hidden or the rebuild is switched off; keep the box locked and wait.
+    if (lt.hidden || !visible()) { lock(); return; }
+    const s = solveScale();
+    measure(s);
+    lock();
+    const hs = parseFloat(lt.style.getPropertyValue('--hs')) || 1;
+    $('padOut').textContent = p === 0 ? '0 · aired' : '+' + p + 'px';
+    $('rNum').textContent = Math.round(76 * s) + 'px';
+    $('rVote').textContent = Math.round(50 * s) + 'px';
+    $('rHead').textContent = Math.round(71 * hs) + 'px';
+    $('rScale').textContent = Math.round(s * 100) + '%';
+    $('rScale').classList.toggle('down', s < 0.999);
+  }
+
+  function applySoft() {
+    const v = +soft.value, t = v / 100;
+    const c = Math.round(17 + (226 - 17) * Math.min(1, t / 0.75));
+    lt.style.setProperty('--mt', 'rgb(' + c + ',' + c + ',' + Math.min(255, c + 4) + ')');
+    const w = t <= 0.75 ? 3 : Math.max(0, 3 * (1 - (t - 0.75) / 0.25));
+    lt.style.setProperty('--mt-w', w.toFixed(2) + 'px');
+    $('softOut').textContent = v === 0 ? 'Black' : v >= 100 ? 'None' : v < 40 ? 'Dark grey' : v < 75 ? 'Light grey' : 'Faint';
+    apply();
+  }
+
+  function setCase(upper) {
+    lt.classList.toggle('caps', upper);
+    $('caseUpper').setAttribute('aria-pressed', upper);
+    $('caseMixed').setAttribute('aria-pressed', !upper);
+    apply();
+  }
+
+  pad.addEventListener('input', apply);
+  soft.addEventListener('input', applySoft);
+  $('caseUpper').addEventListener('click', () => setCase(true));
+  $('caseMixed').addEventListener('click', () => setCase(false));
+  $('orig').addEventListener('click', e => {
+    const on = e.currentTarget.getAttribute('aria-pressed') !== 'true';
+    e.currentTarget.setAttribute('aria-pressed', on);
+    e.currentTarget.textContent = on ? 'Show rebuilt' : 'Show original';
+    lt.hidden = on;
+    frame.classList.toggle('original', on);
+    if (!on) apply();
+    $('tag').textContent = on ? 'Original broadcast' : 'Rebuilt graphic';
+  });
+  $('reset').addEventListener('click', () => { pad.value = 0; soft.value = 0; setCase(true); applySoft(); });
+
+  function init() { applySoft(); }
+  new ResizeObserver(fitStage).observe(stage);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) apply(); });
+  if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', () => apply());
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(init);
+  fitStage();
+  init();
+})();
+</script>
